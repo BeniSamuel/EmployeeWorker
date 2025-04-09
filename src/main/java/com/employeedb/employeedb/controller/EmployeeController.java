@@ -3,12 +3,12 @@ package com.employeedb.employeedb.controller;
 import com.employeedb.employeedb.dto.EmployeeDto;
 import com.employeedb.employeedb.service.EmployeeService;
 import com.employeedb.employeedb.model.Employee;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -30,13 +30,20 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Employee>> getEmployee (@PathVariable int id) {
-        Optional<Employee> employee = this.employeeService.getEmployee(id);
-        if (employee.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(employee);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(employee);
-        }
-
+    public ResponseEntity<Employee> getEmployee (@PathVariable int id) throws ChangeSetPersister.NotFoundException {
+        Employee employee = this.employeeService.getEmployee(id);
+        return ResponseEntity.status(HttpStatus.OK).body(employee);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee (@RequestBody EmployeeDto employeeDto ,@PathVariable int id) throws ChangeSetPersister.NotFoundException {
+        Employee employee = this.employeeService.updateEmployee(employeeDto, id);
+        return ResponseEntity.status(HttpStatus.OK).body(employee);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployee (@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.employeeService.deleteEmployee(id));
+    }
+
 }
