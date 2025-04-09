@@ -3,7 +3,6 @@ package com.employeedb.employeedb.service;
 import com.employeedb.employeedb.dto.AdminDto;
 import com.employeedb.employeedb.dto.AdminLoginDto;
 import com.employeedb.employeedb.model.Admin;
-import com.employeedb.employeedb.repository.AdminRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +18,7 @@ public class AuthService {
     }
 
     public String loginAdmin (AdminLoginDto adminLoginDto) {
+        Admin admin = this.adminService.getAdminByEmail(adminLoginDto.getEmail());
 
     }
 }
