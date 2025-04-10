@@ -4,6 +4,8 @@ import com.employeedb.employeedb.dto.AdminDto;
 import com.employeedb.employeedb.dto.AdminLoginDto;
 import com.employeedb.employeedb.exceptions.UnAuthorizedException;
 import com.employeedb.employeedb.model.Admin;
+import com.employeedb.employeedb.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final AdminService adminService;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public AuthService ( AdminService adminService, PasswordEncoder passwordEncoder ) {
         this.adminService = adminService;
@@ -27,5 +31,7 @@ public class AuthService {
         if (!passwordEncoder.matches(adminLoginDto.getPassword(),admin.getPassword())) {
             throw new UnAuthorizedException("Invalid Credentials");
         }
+
+        return jwtUtil.generateToken(admin.getEmail());
     }
 }
