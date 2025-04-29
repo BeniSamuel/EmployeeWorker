@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -24,7 +24,7 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.employeeService.createUser(employeeDto));
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<List<Employee>> getAllEmployees () {
         return ResponseEntity.status(HttpStatus.OK).body(this.employeeService.getAllUsers());
     }
